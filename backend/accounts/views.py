@@ -8,10 +8,16 @@ from django.contrib.auth import get_user_model
 # Create your views here.
  
 User = get_user_model()
-class register(APIView):
+class RegisterView(APIView):
     def post(self , request):
-        registeration = Registerserializers(data = request.data)
-        if registeration.is_valid():
-            return Response(registeration.data , status=status.HTTP_201_CREATED)
-        return Response(registeration.errors , status=status.HTTP_400_BAD_REQUEST)
+        serializer = Registerserializers(data = request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+
+            return Response({
+                    "message": "Registration successful.",
+                    "user_id": user.id,
+                    "email": user.email
+                }, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
     
