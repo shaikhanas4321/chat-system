@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import status
+from rest_framework import status , permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from  accounts.models import User
@@ -21,3 +21,15 @@ class RegisterView(APIView):
                 }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
     
+class verifyOTP(APIView):
+    permission_classes = [permissions.AllowAny]
+    def post(self , request):
+        serializer = verifyOTPserializer(data = request.data)
+        serializer.is_valid(raise_exception=True)
+        user =  serializer.validated_data["user"]
+        user.email_verified = True
+        user.email_otp.delete()
+        user.save(update_fields=["email_verified"])
+
+        return Response({"message": "Email verified successfully."}, status=status.HTTP_200_OK)
+        
