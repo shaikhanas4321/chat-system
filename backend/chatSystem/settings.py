@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,11 +41,18 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
 MAILERS = {
     "default": {
-        "BACKEND": "django.core.mail.backends.console.EmailBackend",
+        "BACKEND": "django.core.mail.backends.smtp.EmailBackend",
+        "HOST": "smtp.gmail.com",
+        "PORT": 587,
+        "USERNAME": os.environ.get("backendwork43@gmail.com"),
+        "PASSWORD": os.environ.get("xbyo ugfb uinz dfhy"),
+        "USE_TLS": True,
     }
 }
+DEFAULT_FROM_EMAIL = os.environ.get("backendwork43@gmail.com")
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

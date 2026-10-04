@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser , BaseUserManager
-
+from django.conf import settings
+from django.utils import timezone
+from datetime import timedelta
 # Create your models here.
 class UserManager(BaseUserManager):
     def create_user(self , email , password=None ,**extra_feild ):
@@ -29,16 +31,12 @@ class User(AbstractBaseUser):
     USERNAME_FIELD = "email"
 
 
-class EmailOTP(models.Model):
-    user = models.OneToOneField(User , on_delete=models.CASCADE , related_name= "email_OTP")
-    otp = models.CharField(max_length=6)
-    created_at = models.DateTimeField(auto_now_add=True)
-    expires_at = models.DateTimeField()
-
-    class Meta:
-        ordering = ["-created_at"]
-
-    def __str__(self):
-        return f"OTP for {self.user.email}"
+class emailOTP(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    otp=models.CharField(max_length=6)
+    created_at = models.DateTimeField(auto_now=True)
+    def is_expired(self):
+         return timezone.now() > self.created_at + timedelta(minutes=5)
+    
 
 
