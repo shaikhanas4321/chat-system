@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from accounts.models import User
+from accounts.utils import generate_otp , send_otp_email
+
 
 class Registerserializers(serializers.Serializer):
     email = serializers.EmailField()
@@ -16,6 +18,9 @@ class Registerserializers(serializers.Serializer):
     def create(self ,validated_data):
        validated_data.pop("confirm_password")
        user = User.objects.create_user(email = validated_data["email"] , password = validated_data["password"])
+       otp = generate_otp(user)
+       send_otp_email(user , otp)
+    
        return user
         
 
