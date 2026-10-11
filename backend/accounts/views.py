@@ -12,24 +12,31 @@ class RegisterView(APIView):
     def post(self , request):
         serializer = Registerserializers(data = request.data)
         if serializer.is_valid():
-            user = serializer.save()
+            registration = serializer.save()
 
             return Response({
-                    "message": "Registration successful.",
-                    "user_id": user.id,
-                    "email": user.email
-                }, status=status.HTTP_201_CREATED)
+                     
+                "message": "OTP sent to your email.",
+                "email": registration["email"],
+            },
+            status=status.HTTP_200_OK,
+        )
         return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
     
 class verifyOTP(APIView):
     permission_classes = [permissions.AllowAny]
     def post(self , request):
-        serializer = verifyOTPserializer(data = request.data)
-        serializer.is_valid(raise_exception=True)
-        user =  serializer.validated_data["user"]
-        user.email_verified = True
-        user.email_otp.delete()
-        user.save(update_fields=["email_verified"])
+              serializer = verifyOTPserializer(data=request.data)
+              serializer.is_valid(raise_exception=True)
 
-        return Response({"message": "Email verified successfully."}, status=status.HTTP_200_OK)
+              user = serializer.save()
+
+              return Response(
+            {
+                "message": "Email verified and account created successfully.",
+                "user_id": user.id,
+                "email": user.email,
+            },
+            status=status.HTTP_201_CREATED,
+        )
         
