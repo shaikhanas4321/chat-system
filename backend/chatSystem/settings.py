@@ -64,7 +64,12 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'chatSystem.urls'
-
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "chat-system-registration-cache",
+    }
+}
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

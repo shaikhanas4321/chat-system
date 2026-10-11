@@ -1,24 +1,21 @@
 import secrets
-from datetime import timedelta
 from django.core.mail import send_mail
-from django.utils import timezone
 
-from accounts.models import emailOTP
 
-def generate_otp(user):
-     otp = f"{secrets.randbelow(1_000_000):06d}"
-     expires_at = timezone.now() + timedelta(minutes=5)
-     emailOTP.objects.update_or_create(
-          user = user,
-          defaults={
-               "otp":otp,
-                         
-               },
-     )
-     return otp
+import secrets
+from django.core.mail import send_mail
 
-def send_otp_email(user , otp):
-        send_mail(
+
+def registration_cache_key(email):
+    return f"pending_registration:{email.strip().lower()}"
+
+
+def generate_otp():
+    return f"{secrets.randbelow(1_000_000):06d}"
+
+
+def send_otp_email(email, otp):
+    send_mail(
         subject="Chat System - Email Verification",
         message=f"""
 Hello,
@@ -32,6 +29,6 @@ This code will expire in 5 minutes.
 If you did not create an account, you can ignore this email.
 """,
         from_email=None,
-        recipient_list=[user.email],
+        recipient_list=[email],
         fail_silently=False,
     )
