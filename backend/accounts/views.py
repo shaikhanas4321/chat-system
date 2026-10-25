@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from  accounts.models import User
 from accounts.serializers import *
 from django.contrib.auth import get_user_model
+from rest_framework_simplejwt.views import TokenObtainPairView
 # Create your views here.
  
 User = get_user_model()
@@ -39,4 +40,7 @@ class verifyOTP(APIView):
             },
             status=status.HTTP_201_CREATED,
         )
-        
+
+class LoginView(TokenObtainPairView):
+     serializer_class = CustomTokenObtainSerializer
+     

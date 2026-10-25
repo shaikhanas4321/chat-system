@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser , BaseUserManager
+from django.contrib.auth.models import (AbstractBaseUser , BaseUserManager ,PermissionsMixin)
 from django.conf import settings
 from django.utils import timezone
 from datetime import timedelta
@@ -14,19 +14,31 @@ class UserManager(BaseUserManager):
         user.save(using = self._db)
         return user
     def create_superuser(self, email, password=None, **extra_fields):
-        user = self.create_user(email=email,password=password,**extra_fields)
-        user.is_staff = True
-        user.is_superuser = True
-        user.save(using=self._db)
-        return user
+            extra_fields.setdefault("is_staff", True)
+            extra_fields.setdefault("is_superuser", True)
+            extra_fields.setdefault("is_active", True)
+
+            if extra_fields.get("is_staff") is not True:
+                  raise ValueError("Superuser must have is_staff=True")
+
+            if extra_fields.get("is_superuser") is not True:
+               raise ValueError("Superuser must have is_superuser=True")
+
+            return self.create_user(
+             email=email,
+             password=password,
+             **extra_fields
+             )
 
 
-
-class User(AbstractBaseUser):
+class User(AbstractBaseUser , PermissionsMixin):
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=30 , unique=True ,null=True, blank=True)
     email_verified = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    is_staff = models.BooleanField(default = False)
+    is_superuser = models.BooleanField(default= False)
+    is_active = models.BooleanField(default=False)
     objects = UserManager()
     USERNAME_FIELD = "email"
 

@@ -2,6 +2,7 @@ from rest_framework import serializers
 from accounts.models import User ,emailOTP
 from accounts.utils import generate_otp , send_otp_email ,registration_cache_key
 from django.core.cache import cache
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth.hashers import make_password
 
 
@@ -84,4 +85,12 @@ class verifyOTPserializer(serializers.Serializer):
 
         return user
 
-     
+class CustomTokenObtainSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        if not self.user.email_verified:
+         raise serializers.ValidationError(
+            "please verify email first"
+        )
+        return data 
+       
