@@ -1,0 +1,220 @@
+/* Password Strength hints */
+.password-hints {
+  display: flex;
+  gap: 1rem;
+  margin-top: -0.5rem;
+  margin-bottom: 1rem;
+  padding-left: 0.25rem;
+}
+
+.hint-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  transition: color var(--transition-fast);
+}
+
+.hint-item.valid {
+  color: var(--success);
+}
+
+/* Submit container */
+.form-submit-wrapper {
+  margin-top: 1.25rem;
+}
+
+/* Status Banners */
+.status-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.84rem;
+  margin-bottom: 1.25rem;
+  animation: fadeInDown 0.3s ease-out;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.success-banner {
+  background-color: var(--success-bg);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #34d399;
+}
+
+.info-banner {
+  background-color: rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  color: #a5b4fc;
+}
+
+/* Login auxiliary row */
+.login-auxiliary-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: -0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.forgot-password-link {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  transition: color var(--transition-fast);
+}
+
+.forgot-password-link:hover {
+  color: var(--accent-primary);
+  text-decoration: underline;
+}
+
+/* Social auth */
+.social-auth-section {
+  margin-bottom: 0.25rem;
+}
+
+/* OTP Specific styles */
+.otp-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.otp-target-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 1rem;
+  margin-bottom: 1.75rem;
+}
+
+.otp-target-icon {
+  color: var(--accent-primary);
+}
+
+.otp-target-email {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  word-break: break-all;
+}
+
+.otp-inputs-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.otp-digit-box {
+  width: 100%;
+  aspect-ratio: 1 / 1.15;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 1.35rem;
+  font-weight: 600;
+  text-align: center;
+  outline: none;
+  transition: all var(--transition-fast);
+}
+
+.otp-digit-box:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+  background-color: #1a2232;
+  transform: translateY(-2px);
+}
+
+.otp-digit-box.is-filled {
+  border-color: #3b4252;
+  background-color: #171e2c;
+}
+
+.otp-digit-box.is-error {
+  border-color: var(--error);
+  box-shadow: 0 0 0 1px var(--error);
+}
+
+.otp-error-text {
+  color: #f87171;
+  font-size: 0.82rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.otp-success-alert {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  color: #34d399;
+  font-size: 0.82rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.otp-resend-wrapper {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.resend-countdown {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.btn-link-action {
+  background: none;
+  border: none;
+  color: var(--accent-primary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: color var(--transition-fast);
+}
+
+.btn-link-action:hover {
+  color: var(--accent-primary-hover);
+  text-decoration: underline;
+}
+
+.otp-back-wrapper {
+  margin-top: 1.25rem;
+  text-align: center;
+}
+
+.btn-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  transition: color var(--transition-fast);
+}
+
+.btn-back-link:hover {
+  color: var(--text-secondary);
+  text-decoration: none;
+}

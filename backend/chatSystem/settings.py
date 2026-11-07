@@ -39,6 +39,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'accounts',
     'rest_framework',
+    "corsheaders",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -158,3 +159,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+]

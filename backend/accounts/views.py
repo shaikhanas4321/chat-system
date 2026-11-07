@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework import status , permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from  accounts.models import User
 from accounts.serializers import *
 from django.contrib.auth import get_user_model
@@ -43,4 +44,13 @@ class verifyOTP(APIView):
 
 class LoginView(TokenObtainPairView):
      serializer_class = CustomTokenObtainSerializer
-     
+
+class ProfileView(APIView):
+     permission_classes = [IsAuthenticated]
+
+     def get(self , request):
+      return Response({
+           "id":request.user.id,
+           "email":request.user.email,
+           "username":request.user.username,
+      })
