@@ -76,6 +76,7 @@ class verifyOTPserializer(serializers.Serializer):
         user = User(
             email=email,
             email_verified=True,
+            is_active=True,
             password=pending_data["password_hash"],
         )
         user.save()
@@ -94,3 +95,15 @@ class CustomTokenObtainSerializer(TokenObtainPairSerializer):
         )
         return data 
        
+class setusernameSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=64)
+    def validate(self, data):
+        username = data["username"]
+        if User.objects.filter(username = username).exists():
+            raise serializers.ValidationError("username already exists")
+        return data
+    def update(self ,instance , validate_data):
+        instance.username = validate_data["username"]
+        instance.save(update_fields=["username"])
+        return instance
+        

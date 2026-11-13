@@ -54,3 +54,15 @@ class ProfileView(APIView):
            "email":request.user.email,
            "username":request.user.username,
       })
+
+class setUsername(APIView):
+     permission_classes = [IsAuthenticated]
+     def post(self , request):
+          serializer = setusernameSerializer(request.user , data = request.data ,partial =True)
+          serializer.is_valid(raise_exception=True)
+          user = serializer.save()
+          return Response({
+               "message":"your user name has been set successfully",
+               "email":request.user.email,
+               "username":request.user.username
+          })
