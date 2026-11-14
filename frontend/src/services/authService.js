@@ -1,9 +1,6 @@
-/**
- * Auth Service Stub
- *
- * Prepared for connection to Django REST Framework backend.
- * Do NOT mock or invent live responses here yet; keep clean signature references.
- */
+import api, { extractErrorMessage } from './api';
+
+export { extractErrorMessage };
 
 export const authService = {
   /**
@@ -11,9 +8,12 @@ export const authService = {
    * @param {{ email: string, password: string, confirmPassword: string }} data
    */
   async register(data) {
-    // To be connected to DRF API endpoint (e.g., /api/auth/register/)
-    console.debug('authService.register called with:', { email: data.email });
-    return Promise.resolve({ success: true, email: data.email });
+    const response = await api.post('/accounts/register/', {
+      email: data.email.trim(),
+      password: data.password,
+      confirm_password: data.confirmPassword || data.confirm_password,
+    });
+    return response.data;
   },
 
   /**
@@ -21,28 +21,99 @@ export const authService = {
    * @param {{ email: string, otp: string }} data
    */
   async verifyOtp(data) {
-    // To be connected to DRF API endpoint (e.g., /api/auth/verify-otp/)
-    console.debug('authService.verifyOtp called with:', data);
-    return Promise.resolve({ success: true });
+    const response = await api.post('/accounts/verify-otp/', {
+      email: data.email.trim(),
+      otp: data.otp.trim(),
+    });
+    return response.data;
   },
 
   /**
-   * Resend OTP verification code
-   * @param {{ email: string }} data
-   */
-  async resendOtp(data) {
-    // To be connected to DRF API endpoint (e.g., /api/auth/resend-otp/)
-    console.debug('authService.resendOtp called with:', data);
-    return Promise.resolve({ success: true });
-  },
-
-  /**
-   * Log in user
-   * @param {{ email: string, password: string }} data
+   * Log in user (TokenObtainPair with email as USERNAME_FIELD)
+   * Accepts identifier as email or username
+   * @param {{ identifier: string, password: string }} data
    */
   async login(data) {
-    // To be connected to DRF API endpoint (e.g., /api/auth/login/ or /api/token/)
-    console.debug('authService.login called with:', { email: data.email });
-    return Promise.resolve({ success: true });
+    const payload = {
+      email: data.identifier ? data.identifier.trim() : (data.email || '').trim(),
+      password: data.password,
+    };
+    const response = await api.post('/accounts/login/', payload);
+    if (response.data.access) {
+      localStorage.setItem('access_token', response.data.access);
+    }
+    if (response.data.refresh) {
+      localStorage.setItem('refresh_token', response.data.refresh);
+    }
+    return response.data;
+  },
+
+  /**
+   * Request password reset OTP for username
+   * @param {{ username: string }} data
+   */
+  async forgotPassword(data) {
+    const response = await api.post('/accounts/forgot-password/', {
+      username: data.username.trim(),
+    });
+    return response.data;
+  },
+
+  /**
+   * Verify password reset OTP
+   * @param {{ username: string, otp: string }} data
+   */
+  async verifyForgotPasswordOtp(data) {
+    const response = await api.post('/accounts/verify-forgot-otp/', {
+      username: data.username.trim(),
+      otp: data.otp.trim(),
+    });
+    return response.data;
+  },
+
+  /**
+   * Set new password using reset token
+   * @param {{ reset_token: string, new_password: string, confirm_password: string }} data
+   */
+  async setPassword(data) {
+    const response = await api.post('/accounts/set-password/', {
+      reset_token: data.reset_token,
+      new_password: data.new_password,
+      confirm_password: data.confirm_password,
+    });
+    return response.data;
+  },
+
+  /**
+   * Set or update username for logged in user
+   * @param {{ username: string }} data
+   */
+  async setUsername(data) {
+    const token = localStorage.getItem('access_token');
+    const response = await api.post(
+      '/accounts/set-username/',
+      { username: data.username.trim() },
+      token ? { headers: { Authorization: `Bearer ${token}` } } : {}
+    );
+    return response.data;
+  },
+
+  /**
+   * Get user profile
+   */
+  async getProfile() {
+    const token = localStorage.getItem('access_token');
+    const response = await api.get('/accounts/profile/', {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+    return response.data;
+  },
+
+  /**
+   * Log out
+   */
+  logout() {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
   }
 };

@@ -1,143 +1,199 @@
-/* Form Field Container */
+/* ==========================================================================
+   Form Field Components & Inputs
+   Tactile focus states, precision borders, dark slate depth
+   ========================================================================== */
+
 .form-field {
   display: flex;
   flex-direction: column;
-  margin-bottom: 1.15rem;
+  margin-bottom: 1.25rem;
   text-align: left;
 }
 
-.field-label {
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--text-secondary);
+.field-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 0.45rem;
+}
+
+.field-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
   display: flex;
   align-items: center;
   gap: 0.25rem;
+  letter-spacing: -0.01em;
 }
 
 .field-required {
   color: var(--accent-primary);
+  font-weight: 700;
+}
+
+.field-helper {
+  font-size: 0.75rem;
+  color: var(--text-muted);
 }
 
 .input-box-wrapper {
   position: relative;
   display: flex;
   align-items: center;
+  width: 100%;
 }
 
 .form-input {
   width: 100%;
   background-color: var(--bg-input);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border-default);
   border-radius: var(--radius-sm);
-  padding: 0.75rem 1rem;
-  font-size: 0.95rem;
+  padding: 0.78rem 1rem;
+  font-size: 0.92rem;
+  font-family: var(--font-body);
   color: var(--text-primary);
   transition: all var(--transition-fast);
   outline: none;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
 .form-input::placeholder {
-  color: var(--text-muted);
+  color: var(--text-faint);
+  font-weight: 400;
 }
 
-.form-input:hover {
-  border-color: #384258;
+.form-input:hover:not(:disabled) {
+  border-color: var(--border-hover);
+  background-color: var(--bg-surface-elevated);
 }
 
 .form-input:focus {
   border-color: var(--border-focus);
-  box-shadow: 0 0 0 3px var(--accent-glow);
-  background-color: #181f2c;
+  background-color: var(--bg-input-focus);
+  box-shadow: var(--shadow-focus), inset 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.form-input:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  background-color: var(--bg-surface-sunken);
 }
 
 .form-input.with-start-icon {
-  padding-left: 2.6rem;
+  padding-left: 2.65rem;
 }
 
 .form-input.with-end-icon {
-  padding-right: 2.6rem;
+  padding-right: 2.65rem;
 }
 
-.field-icon {
+.field-icon-start {
   position: absolute;
+  left: 0.9rem;
   color: var(--text-muted);
   display: flex;
   align-items: center;
   justify-content: center;
   pointer-events: none;
+  transition: color var(--transition-fast);
 }
 
-.field-icon-start {
-  left: 0.85rem;
+.form-input:focus ~ .field-icon-start,
+.input-box-wrapper:focus-within .field-icon-start {
+  color: var(--accent-primary);
 }
 
 .field-icon-btn {
   position: absolute;
-  right: 0.75rem;
-  background: none;
+  right: 0.65rem;
+  background: transparent;
   border: none;
   color: var(--text-muted);
   cursor: pointer;
-  padding: 0.25rem;
+  padding: 0.35rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 4px;
-  transition: color var(--transition-fast);
+  border-radius: var(--radius-xs);
+  transition: all var(--transition-fast);
 }
 
 .field-icon-btn:hover {
   color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
 }
 
+/* Error States */
 .has-error .form-input {
-  border-color: var(--error);
-  box-shadow: 0 0 0 1px var(--error);
+  border-color: var(--danger);
+  background-color: rgba(244, 63, 94, 0.03);
+}
+
+.has-error .form-input:focus {
+  box-shadow: var(--shadow-danger);
+}
+
+.has-error .field-icon-start {
+  color: var(--danger);
 }
 
 .field-error-message {
   margin-top: 0.4rem;
-  font-size: 0.78rem;
-  color: #f87171;
+  font-size: 0.77rem;
+  font-weight: 500;
+  color: var(--danger);
   display: flex;
   align-items: center;
   gap: 0.35rem;
+  animation: fieldShake 0.25s ease-out;
 }
 
-/* Primary Button */
+@keyframes fieldShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
+}
+
+/* ==========================================================================
+   Primary Action Button
+   ========================================================================== */
 .btn-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  gap: 0.6rem;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: #ffffff;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: var(--radius-sm);
-  padding: 0.82rem 1.25rem;
-  font-size: 0.95rem;
+  padding: 0.82rem 1.4rem;
+  font-size: 0.92rem;
   font-weight: 600;
-  letter-spacing: 0.01em;
+  letter-spacing: -0.01em;
   cursor: pointer;
   transition: all var(--transition-fast);
-  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);
+  box-shadow: 0 2px 8px var(--accent-glow);
+  position: relative;
+  overflow: hidden;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
-  box-shadow: 0 6px 18px rgba(79, 70, 229, 0.45);
+  background: linear-gradient(135deg, #34d399 0%, #059669 100%);
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35);
   transform: translateY(-1px);
 }
 
 .btn-primary:active:not(:disabled) {
-  transform: translateY(0);
+  transform: translateY(1px);
+  box-shadow: 0 1px 4px var(--accent-glow);
 }
 
 .btn-primary:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
   box-shadow: none;
+  transform: none;
 }
 
 .btn-full {
@@ -150,7 +206,7 @@
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-top-color: #ffffff;
   border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+  animation: spin 0.75s linear infinite;
 }
 
 @keyframes spin {
@@ -159,18 +215,43 @@
   }
 }
 
-/* Google Button */
+/* Secondary Button */
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--bg-surface-elevated);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  padding: 0.8rem 1.25rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  color: var(--text-primary);
+  border-color: var(--border-hover);
+  background: #1e2430;
+}
+
+/* ==========================================================================
+   Google OAuth Button
+   ========================================================================== */
 .btn-google {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.75rem;
   width: 100%;
-  background: #171d29;
-  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-default);
   border-radius: var(--radius-sm);
   color: var(--text-primary);
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   font-weight: 500;
   padding: 0.75rem 1rem;
   cursor: pointer;
@@ -178,20 +259,23 @@
 }
 
 .btn-google:hover {
-  background: #1e2638;
-  border-color: #3b455b;
+  background: #1e2533;
+  border-color: var(--border-hover);
+  color: #ffffff;
 }
 
-/* Separator / Divider */
+/* ==========================================================================
+   Dividers & Auxiliary Navigation
+   ========================================================================== */
 .auth-divider {
   display: flex;
   align-items: center;
   text-align: center;
-  margin: 1.5rem 0;
+  margin: 1.4rem 0;
   color: var(--text-muted);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
 }
 
 .auth-divider::before,
@@ -205,15 +289,19 @@
   padding: 0 0.85rem;
 }
 
-/* Bottom switch prompt */
 .auth-switch {
   margin-top: 1.5rem;
   text-align: center;
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   color: var(--text-secondary);
 }
 
 .auth-switch a {
   font-weight: 600;
   margin-left: 0.35rem;
+  color: var(--accent-primary);
+}
+
+.auth-switch a:hover {
+  color: #34d399;
 }

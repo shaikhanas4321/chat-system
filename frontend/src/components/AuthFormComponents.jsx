@@ -9,24 +9,32 @@ export function InputField({
   onChange,
   placeholder,
   error,
+  helperText,
   icon: Icon,
   endIcon: EndIcon,
   onEndIconClick,
   disabled = false,
   required = false,
-  autoComplete
+  autoComplete,
+  rightAction,
+  autoFocus = false
 }) {
   return (
     <div className={`form-field ${error ? 'has-error' : ''}`}>
-      {label && (
-        <label htmlFor={id} className="field-label">
-          {label} {required && <span className="field-required">*</span>}
-        </label>
+      {(label || rightAction) && (
+        <div className="field-label-row">
+          {label ? (
+            <label htmlFor={id} className="field-label">
+              {label} {required && <span className="field-required">*</span>}
+            </label>
+          ) : <span />}
+          {rightAction && <div className="field-right-action">{rightAction}</div>}
+        </div>
       )}
       <div className="input-box-wrapper">
         {Icon && (
-          <span className="field-icon field-icon-start">
-            <Icon size={18} />
+          <span className="field-icon-start">
+            <Icon size={16} />
           </span>
         )}
         <input
@@ -37,21 +45,23 @@ export function InputField({
           placeholder={placeholder}
           disabled={disabled}
           autoComplete={autoComplete}
+          autoFocus={autoFocus}
           className={`form-input ${Icon ? 'with-start-icon' : ''} ${EndIcon ? 'with-end-icon' : ''}`}
         />
         {EndIcon && (
           <button
             type="button"
-            className="field-icon-btn field-icon-end"
+            className="field-icon-btn"
             onClick={onEndIconClick}
             tabIndex={-1}
-            aria-label="Toggle input view"
+            aria-label="Toggle input visibility"
           >
-            <EndIcon size={18} />
+            <EndIcon size={16} />
           </button>
         )}
       </div>
       {error && <span className="field-error-message">{error}</span>}
+      {!error && helperText && <span className="field-helper">{helperText}</span>}
     </div>
   );
 }
@@ -62,7 +72,8 @@ export function PrimaryButton({
   type = 'submit',
   isLoading = false,
   disabled = false,
-  fullWidth = true
+  fullWidth = true,
+  icon: Icon
 }) {
   return (
     <button
@@ -72,8 +83,37 @@ export function PrimaryButton({
       className={`btn-primary ${fullWidth ? 'btn-full' : ''}`}
     >
       {isLoading ? (
-        <span className="btn-spinner" />
-      ) : children}
+        <>
+          <span className="btn-spinner" />
+          <span>Processing...</span>
+        </>
+      ) : (
+        <>
+          {children}
+          {Icon && <Icon size={16} />}
+        </>
+      )}
+    </button>
+  );
+}
+
+export function SecondaryButton({
+  children,
+  onClick,
+  type = 'button',
+  disabled = false,
+  fullWidth = false,
+  icon: Icon
+}) {
+  return (
+    <button
+      type={type}
+      onClick={onClick}
+      disabled={disabled}
+      className={`btn-secondary ${fullWidth ? 'btn-full' : ''}`}
+    >
+      {Icon && <Icon size={15} />}
+      <span>{children}</span>
     </button>
   );
 }
@@ -85,7 +125,7 @@ export function GoogleButton({ onClick, label = "Continue with Google" }) {
       className="btn-google"
       onClick={onClick}
     >
-      <svg className="google-icon" viewBox="0 0 24 24" width="18" height="18">
+      <svg className="google-icon" viewBox="0 0 24 24" width="17" height="17">
         <path
           fill="#4285F4"
           d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"

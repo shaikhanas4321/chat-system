@@ -1,46 +1,100 @@
+/* ==========================================================================
+   Chat System Design Tokens & Global Baseline
+   Palette: Warm Slate Dark (#0b0d10), Deep Graphite (#12161c),
+   Electric Emerald (#059669 / #10b981), Warm Sand/Amber accents (#f59e0b).
+   No generic purple gradients, no random blobs, pure editorial SaaS precision.
+   ========================================================================== */
+
 :root {
-  --bg-primary: #0b0e14;
-  --bg-surface: #121721;
-  --bg-surface-glass: rgba(18, 23, 33, 0.75);
-  --bg-elevated: #1a202c;
-  --bg-input: #151b26;
-  --border-subtle: #242c3d;
-  --border-focus: #4f46e5;
-  --text-primary: #f1f5f9;
+  /* Surfaces */
+  --bg-app: #0b0d11;
+  --bg-surface: #12161d;
+  --bg-surface-elevated: #181d26;
+  --bg-surface-sunken: #0e1117;
+  --bg-input: #0f131a;
+  --bg-input-focus: #141923;
+
+  /* Accent: Signal Emerald & Brass Amber */
+  --accent-primary: #10b981;
+  --accent-primary-hover: #059669;
+  --accent-primary-active: #047857;
+  --accent-muted: rgba(16, 185, 129, 0.12);
+  --accent-glow: rgba(16, 185, 129, 0.22);
+  
+  --brass-amber: #f59e0b;
+  --brass-muted: rgba(245, 158, 11, 0.12);
+
+  /* Borders & Rules */
+  --border-subtle: #1e2430;
+  --border-default: #283141;
+  --border-focus: #10b981;
+  --border-hover: #374257;
+
+  /* Typography */
+  --font-heading: 'Syne', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Text Colors */
+  --text-primary: #f8fafc;
   --text-secondary: #94a3b8;
   --text-muted: #64748b;
-  --accent-primary: #6366f1;
-  --accent-primary-hover: #4f46e5;
-  --accent-glow: rgba(99, 102, 241, 0.25);
-  --error: #ef4444;
-  --error-bg: rgba(239, 68, 68, 0.12);
+  --text-faint: #475569;
+
+  /* Feedback Colors */
+  --danger: #f43f5e;
+  --danger-muted: rgba(244, 63, 94, 0.12);
+  --danger-border: rgba(244, 63, 94, 0.35);
+
   --success: #10b981;
-  --success-bg: rgba(16, 185, 129, 0.12);
-  --font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  --success-muted: rgba(16, 185, 129, 0.12);
+  --success-border: rgba(16, 185, 129, 0.35);
+
+  --warning: #f59e0b;
+  --warning-muted: rgba(245, 158, 11, 0.12);
+  --warning-border: rgba(245, 158, 11, 0.35);
+
+  /* Radii */
+  --radius-xs: 4px;
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 18px;
-  --radius-full: 9999px;
-  --transition-fast: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  --transition-smooth: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  --radius-xl: 24px;
+  --radius-pill: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 16px 40px -10px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.04);
+  --shadow-focus: 0 0 0 3px rgba(16, 185, 129, 0.22);
+  --shadow-danger: 0 0 0 3px rgba(244, 63, 94, 0.2);
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-smooth: 240ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-* {
+*, *::before, *::after {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
 }
 
 body {
-  font-family: var(--font-family);
-  background-color: var(--bg-primary);
+  font-family: var(--font-body);
+  background-color: var(--bg-app);
   color: var(--text-primary);
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
   overflow-x: hidden;
+  letter-spacing: -0.01em;
 }
 
 #root {
@@ -49,17 +103,50 @@ body {
   flex-direction: column;
 }
 
+/* Typography elements */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  letter-spacing: -0.03em;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
 a {
   color: var(--accent-primary);
   text-decoration: none;
+  font-weight: 500;
   transition: color var(--transition-fast);
 }
 
 a:hover {
-  color: var(--accent-primary-hover);
-  text-decoration: underline;
+  color: #34d399;
 }
 
-button, input {
+button, input, select, textarea {
   font-family: inherit;
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-app);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-default);
+  border-radius: var(--radius-pill);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-hover);
+}
+
+/* Selection */
+::selection {
+  background: rgba(16, 185, 129, 0.3);
+  color: #ffffff;
 }
