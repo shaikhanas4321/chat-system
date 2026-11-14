@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from accounts.models import User ,emailOTP
-from accounts.utils import generate_otp , send_otp_email ,registration_cache_key
+from accounts.utils import generate_otp , send_otp_email ,registration_cache_key , send_ResetPassword_OTP_email
 from django.core.cache import cache
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth.hashers import make_password
@@ -106,4 +106,23 @@ class setusernameSerializer(serializers.Serializer):
         instance.username = validate_data["username"]
         instance.save(update_fields=["username"])
         return instance
-        
+
+class ForgotPasswordSerializers(serializers.Serializer):
+    username = serializers.CharField(max_length=64)
+    def validate(self , data):
+        username = data["username"]
+        if not User.objects.filter(username = username).exists():
+            raise serializers.ValidationError("Username does not exists")
+        return data
+    def create(self , validated_data):
+        username = validated_data["username"]
+        user = User.objects.get(username = username)
+        email = user.email
+        otp = generate_otp()
+        try:
+            send_ResetPassword_OTP_email(email , otp , username)
+        except Exception:
+            raise serializers.ValidationError(
+                                   "Could not send OTP email. Please try again."
+                                    )
+        return {"email": email}

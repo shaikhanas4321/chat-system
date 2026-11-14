@@ -66,3 +66,13 @@ class setUsername(APIView):
                "email":request.user.email,
                "username":request.user.username
           })
+class ForgotPasswod(APIView):
+     def post(self , request):
+          serializer = ForgotPasswordSerializers(data = request.data)
+          if serializer.is_valid(raise_exception=True):
+               result = serializer.save()
+               return Response({
+                    "message": "OTP sent to your email.",
+                    "email": result["email"],
+               }, status=status.HTTP_200_OK,)
+          return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)

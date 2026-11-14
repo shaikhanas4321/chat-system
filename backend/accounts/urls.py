@@ -7,5 +7,6 @@ urlpatterns=[
     path("verify-otp/" , verifyOTP.as_view(), name= "verify-otp"),
     path("login/",LoginView.as_view(),name="login"),
     path("profile/" , ProfileView.as_view(), name="profile"),
-    path("set-username/" , setUsername.as_view() , name= "set-username")
+    path("set-username/" , setUsername.as_view() , name= "set-username"),
+    path("forgot-password/" , ForgotPasswod.as_view() , name="forgot-password"),
     ]
