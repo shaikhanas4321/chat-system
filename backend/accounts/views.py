@@ -88,4 +88,13 @@ class verifyForgotPasswordOTP(APIView):
                } ,status=status.HTTP_200_OK)
           return Response(serializer.errors , status= status.HTTP_400_BAD_REQUEST)
      
-          
+
+class resetPassword(APIView):
+     def post(self , request):
+          serializer = setPasswordSerializer(data = request.data)
+          serializer.is_valid(raise_exception=True)
+          serializer.save()
+          return Response({
+                                "message": "your password has been reset successfully",
+                           }, status=status.HTTP_200_OK,)
+       

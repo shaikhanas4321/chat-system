@@ -165,4 +165,27 @@ class verifyForgotPasswordOTPserializer(serializers.Serializer):
         "reset_token": reset_token
     }
 
+class setPasswordSerializer(serializers.Serializer):
+      reset_token = serializers.CharField()
+      new_password = serializers.CharField(max_length=64 , write_only = True)
+      confirm_password = serializers.CharField(max_length=64 , write_only = True)
+      def validate(self, data):
+          reset_token = data["reset_token"]
+          key = f"password_reset_token:{reset_token}"
+          username = cache.get(key)
+          if username is None:
+              raise serializers.ValidationError("invalid or expired reset token")
+          if data["new_password"] != data["confirm_password"]:
+              raise serializers.ValidationError("both passwords should match")
+          data["username"] = username
+          data["key"] = key
+          return data
+      def create(self, validated_data):
+            username = validated_data["username"]
+            user = User.objects.get(username=username)
+            user.set_password(validated_data["new_password"])
+            user.save()
+            cache.delete(validated_data["key"]) 
+            return user 
+
           
