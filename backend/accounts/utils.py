@@ -6,6 +6,9 @@ from django.core.mail import send_mail
 def registration_cache_key(email):
     return f"pending_registration:{email.strip().lower()}"
 
+def forgot_password_cache_key(username):
+    return f"pending_registration:{username.strip()}"
+
 
 def generate_otp():
     return f"{secrets.randbelow(1_000_000):06d}"

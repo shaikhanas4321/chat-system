@@ -9,4 +9,5 @@ urlpatterns=[
     path("profile/" , ProfileView.as_view(), name="profile"),
     path("set-username/" , setUsername.as_view() , name= "set-username"),
     path("forgot-password/" , ForgotPasswod.as_view() , name="forgot-password"),
+    path("verify-forgot-otp/", verifyForgotPasswordOTP.as_view(), name="verify-forgot-otp"),
     ]

@@ -76,3 +76,16 @@ class ForgotPasswod(APIView):
                     "email": result["email"],
                }, status=status.HTTP_200_OK,)
           return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
+
+class verifyForgotPasswordOTP(APIView):
+     def post(self , request):
+          serializer = verifyForgotPasswordOTPserializer(data = request.data)
+          if serializer.is_valid(raise_exception=True):
+               result = serializer.save()
+               return Response({
+                    "message":"otp has matched",
+                    "reset":result["reset_token"]
+               } ,status=status.HTTP_200_OK)
+          return Response(serializer.errors , status= status.HTTP_400_BAD_REQUEST)
+     
+          
