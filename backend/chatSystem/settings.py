@@ -38,6 +38,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'accounts',
+    'chat',
     'rest_framework',
     "corsheaders",
     'django.contrib.admin',
