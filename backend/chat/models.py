@@ -1,5 +1,4 @@
 from django.db import models
-from accounts.models import User
 from django.conf import settings
 from django.db.models import Q , F
 from django.core.exceptions import ValidationError
@@ -13,7 +12,7 @@ class Conversation(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE ,
         related_name="conversation_as_user2")
-    created_at = models.DateField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     class Meta:
         constraints =[
             models.UniqueConstraint(
@@ -32,7 +31,7 @@ class Conversation(models.Model):
                     self.user2_id,
                     self.user1_id
                 )
-            super().save(*args, **kwargs)
+       super().save(*args, **kwargs)
     def __str__(self):
         return f"Conversation: {self.user1} - {self.user2}"
 
