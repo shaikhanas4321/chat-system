@@ -5,7 +5,7 @@ from chat.models import Conversation
 
 class ConversationCreateSerializer(serializers.Serializer):
     other_user_id = serializers.IntegerField()
-    def validate(self , value):
+    def validate_other_user_id(self , value):
       try:
           other_user = User.objects.get(id = value)
       except User.DoesNotExist:
