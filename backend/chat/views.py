@@ -44,3 +44,40 @@ class ConversationListView(APIView):
             serializer.data,
             status=status.HTTP_200_OK
         )
+
+class MessageCreateView(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self , request):
+        serializer = MessageCreateSerializer(data = request.data , context = {"request":request})
+        serializer.is_valid(raise_exception=True)
+        message = serializer.save(sender = request.user)
+        return Response({
+            "id": message.id,
+            "conversation": message.conversation_id,
+            "sender": message.sender_id,
+            "content": message.content,
+            "is_read": message.is_read,
+            "created_at": message.created_at
+        }, status=status.HTTP_201_CREATED)  
+
+class MessageListView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self , request ,conversation_id ):
+        try:
+            conversation = Conversation.objects.get(id = conversation_id)
+        except Conversation.DoesNotExist:
+            return Response(
+                {"error":"conversation does not exist"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        if request.user.id not in (conversation.user1_id,conversation.user2_id):
+            return Response(
+                {"error":"not a participant of the conversation"},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        messages = Message.objects.filter(conversation = conversation)
+        serializer = MessageListSerializer(messages , many = True)
+        return Response(
+            serializer.data,
+            status=status.HTTP_200_OK
+        )

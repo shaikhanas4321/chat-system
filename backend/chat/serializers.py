@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from accounts.models import User
-from chat.models import Conversation
+from chat.models import Conversation , Message
 
 
 class ConversationCreateSerializer(serializers.Serializer):
@@ -21,3 +21,26 @@ class ConersationListSerializer(serializers.ModelSerializer):
     class Meta:
        model = Conversation
        fields = ["id" , "user1" , "user2" , "created_at"]
+
+class MessageCreateSerializer(serializers.ModelSerializer):
+   class Meta:
+      model = Message
+      fields = ["conversation","content"]
+      def validate_conversation(self , conversation):
+         request = self.context.get("request")
+         if request.user.id not in (conversation.user1_id,conversation.user2_id):
+            raise serializers.ValidationError("you are not a participant of this conversation")
+         return conversation
+
+
+class MessageListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = [
+            "id",
+            "conversation",
+            "sender",
+            "content",
+            "is_read",
+            "created_at"
+        ]
