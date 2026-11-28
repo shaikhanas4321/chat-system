@@ -17,4 +17,7 @@ class ConversationCreateSerializer(serializers.Serializer):
          )
       return value
 
-      
+class ConersationListSerializer(serializers.ModelSerializer):
+    class Meta:
+       model = Conversation
+       fields = ["id" , "user1" , "user2" , "created_at"]
