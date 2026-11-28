@@ -1,12 +1,12 @@
 /* ==========================================================================
-   Form Field Components & Inputs
-   Tactile focus states, precision borders, dark slate depth
+   AuthForm.css: Form Fields, Primary & Google Buttons, Dividers
+   Calm, polished input borders, accessible focus rings
    ========================================================================== */
 
 .form-field {
   display: flex;
   flex-direction: column;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.15rem;
   text-align: left;
 }
 
@@ -14,27 +14,27 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.45rem;
+  margin-bottom: 0.35rem;
 }
 
 .field-label {
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-primary);
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  letter-spacing: -0.01em;
 }
 
 .field-required {
-  color: var(--accent-primary);
-  font-weight: 700;
+  color: var(--danger);
+  font-weight: 600;
 }
 
 .field-helper {
-  font-size: 0.75rem;
-  color: var(--text-muted);
+  font-size: 0.78rem;
+  color: var(--text-tertiary);
+  margin-top: 0.3rem;
 }
 
 .input-box-wrapper {
@@ -49,57 +49,51 @@
   background-color: var(--bg-input);
   border: 1px solid var(--border-default);
   border-radius: var(--radius-sm);
-  padding: 0.78rem 1rem;
+  padding: 0.65rem 0.85rem;
   font-size: 0.92rem;
-  font-family: var(--font-body);
+  font-family: var(--font-sans);
   color: var(--text-primary);
-  transition: all var(--transition-fast);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
   outline: none;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
 .form-input::placeholder {
-  color: var(--text-faint);
-  font-weight: 400;
+  color: var(--text-tertiary);
 }
 
 .form-input:hover:not(:disabled) {
   border-color: var(--border-hover);
-  background-color: var(--bg-surface-elevated);
 }
 
 .form-input:focus {
   border-color: var(--border-focus);
-  background-color: var(--bg-input-focus);
-  box-shadow: var(--shadow-focus), inset 0 1px 2px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-focus);
 }
 
 .form-input:disabled {
-  opacity: 0.55;
+  background-color: var(--bg-subtle);
+  color: var(--text-tertiary);
   cursor: not-allowed;
-  background-color: var(--bg-surface-sunken);
 }
 
 .form-input.with-start-icon {
-  padding-left: 2.65rem;
+  padding-left: 2.35rem;
 }
 
 .form-input.with-end-icon {
-  padding-right: 2.65rem;
+  padding-right: 2.35rem;
 }
 
 .field-icon-start {
   position: absolute;
-  left: 0.9rem;
-  color: var(--text-muted);
+  left: 0.75rem;
+  color: var(--text-tertiary);
   display: flex;
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  transition: color var(--transition-fast);
 }
 
-.form-input:focus ~ .field-icon-start,
 .input-box-wrapper:focus-within .field-icon-start {
   color: var(--accent-primary);
 }
@@ -109,91 +103,68 @@
   right: 0.65rem;
   background: transparent;
   border: none;
-  color: var(--text-muted);
+  color: var(--text-tertiary);
   cursor: pointer;
-  padding: 0.35rem;
+  padding: 0.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-xs);
-  transition: all var(--transition-fast);
+  transition: color var(--transition-fast);
 }
 
 .field-icon-btn:hover {
   color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.05);
 }
 
-/* Error States */
+/* Error states */
 .has-error .form-input {
   border-color: var(--danger);
-  background-color: rgba(244, 63, 94, 0.03);
 }
 
 .has-error .form-input:focus {
   box-shadow: var(--shadow-danger);
 }
 
-.has-error .field-icon-start {
-  color: var(--danger);
-}
-
 .field-error-message {
-  margin-top: 0.4rem;
-  font-size: 0.77rem;
-  font-weight: 500;
+  margin-top: 0.35rem;
+  font-size: 0.78rem;
   color: var(--danger);
   display: flex;
   align-items: center;
-  gap: 0.35rem;
-  animation: fieldShake 0.25s ease-out;
+  gap: 0.3rem;
 }
 
-@keyframes fieldShake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-3px); }
-  75% { transform: translateX(3px); }
-}
-
-/* ==========================================================================
-   Primary Action Button
-   ========================================================================== */
+/* Primary Button */
 .btn-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.6rem;
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  gap: 0.5rem;
+  background-color: var(--accent-primary);
+  color: var(--accent-contrast);
+  border: 1px solid var(--accent-primary);
   border-radius: var(--radius-sm);
-  padding: 0.82rem 1.4rem;
+  padding: 0.68rem 1.15rem;
   font-size: 0.92rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-weight: 500;
   cursor: pointer;
-  transition: all var(--transition-fast);
-  box-shadow: 0 2px 8px var(--accent-glow);
-  position: relative;
-  overflow: hidden;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+  box-shadow: var(--shadow-subtle);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: linear-gradient(135deg, #34d399 0%, #059669 100%);
-  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35);
-  transform: translateY(-1px);
+  background-color: var(--accent-hover);
+  border-color: var(--accent-hover);
 }
 
 .btn-primary:active:not(:disabled) {
   transform: translateY(1px);
-  box-shadow: 0 1px 4px var(--accent-glow);
 }
 
 .btn-primary:disabled {
-  opacity: 0.5;
+  opacity: 0.55;
   cursor: not-allowed;
-  box-shadow: none;
-  transform: none;
 }
 
 .btn-full {
@@ -201,18 +172,16 @@
 }
 
 .btn-spinner {
-  width: 18px;
-  height: 18px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  width: 15px;
+  height: 15px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
   border-top-color: #ffffff;
   border-radius: 50%;
-  animation: spin 0.75s linear infinite;
+  animation: spin 0.7s linear infinite;
 }
 
 @keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+  to { transform: rotate(360deg); }
 }
 
 /* Secondary Button */
@@ -220,12 +189,12 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  background: var(--bg-surface-elevated);
-  color: var(--text-secondary);
+  gap: 0.45rem;
+  background-color: var(--bg-card);
+  color: var(--text-primary);
   border: 1px solid var(--border-default);
   border-radius: var(--radius-sm);
-  padding: 0.8rem 1.25rem;
+  padding: 0.65rem 1rem;
   font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
@@ -233,62 +202,57 @@
 }
 
 .btn-secondary:hover:not(:disabled) {
-  color: var(--text-primary);
+  background-color: var(--bg-subtle);
   border-color: var(--border-hover);
-  background: #1e2430;
 }
 
-/* ==========================================================================
-   Google OAuth Button
-   ========================================================================== */
+/* Google OAuth Button */
 .btn-google {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
+  gap: 0.65rem;
   width: 100%;
-  background: var(--bg-surface-elevated);
+  background-color: var(--bg-card);
   border: 1px solid var(--border-default);
   border-radius: var(--radius-sm);
   color: var(--text-primary);
   font-size: 0.88rem;
   font-weight: 500;
-  padding: 0.75rem 1rem;
+  padding: 0.65rem 1rem;
   cursor: pointer;
   transition: all var(--transition-fast);
 }
 
 .btn-google:hover {
-  background: #1e2533;
+  background-color: var(--bg-subtle);
   border-color: var(--border-hover);
-  color: #ffffff;
 }
 
-/* ==========================================================================
-   Dividers & Auxiliary Navigation
-   ========================================================================== */
+/* Divider */
 .auth-divider {
   display: flex;
   align-items: center;
   text-align: center;
-  margin: 1.4rem 0;
-  color: var(--text-muted);
+  margin: 1.25rem 0;
+  color: var(--text-tertiary);
   font-size: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.05em;
 }
 
 .auth-divider::before,
 .auth-divider::after {
   content: '';
   flex: 1;
-  border-bottom: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-light);
 }
 
 .auth-divider span {
-  padding: 0 0.85rem;
+  padding: 0 0.75rem;
 }
 
+/* Switch link */
 .auth-switch {
   margin-top: 1.5rem;
   text-align: center;
@@ -297,11 +261,6 @@
 }
 
 .auth-switch a {
-  font-weight: 600;
-  margin-left: 0.35rem;
-  color: var(--accent-primary);
-}
-
-.auth-switch a:hover {
-  color: #34d399;
+  font-weight: 500;
+  margin-left: 0.3rem;
 }

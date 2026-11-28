@@ -20,7 +20,6 @@ export default function Login() {
   const [apiError, setApiError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Message passed from OTP verification or password reset flows
   const verifiedMessage = location.state?.verifiedMessage;
 
   const validate = () => {
@@ -73,7 +72,7 @@ export default function Login() {
     } catch (err) {
       const msg = extractErrorMessage(
         err,
-        'Invalid credentials. Please verify your email/username and password.'
+        'Invalid credentials. Please verify your email and password.'
       );
       setApiError(msg);
     } finally {
@@ -82,33 +81,30 @@ export default function Login() {
   };
 
   const handleGoogleClick = () => {
-    alert('Google OAuth sign-in will initialize your secure federated identity.');
+    alert('Google OAuth sign-in will be integrated with your workspace provider.');
   };
 
   return (
     <AuthLayout
       title="Welcome back"
-      subtitle="Authenticate your session to access conversations and channels"
-      stepText="Account Access"
-      showcaseHighlight="Hardware-accelerated transport layer with instant socket synchronization."
+      subtitle="Sign in to your account to continue messaging"
     >
       {verifiedMessage && (
         <div className="status-banner banner-success">
-          <CheckCircle2 size={17} className="status-banner-icon" />
+          <CheckCircle2 size={16} className="status-banner-icon" />
           <span>{verifiedMessage}</span>
         </div>
       )}
 
       {apiError && (
         <div className="status-banner banner-danger" role="alert">
-          <AlertCircle size={17} className="status-banner-icon" />
+          <AlertCircle size={16} className="status-banner-icon" />
           <span>{apiError}</span>
         </div>
       )}
 
-      {/* Google Sign-in */}
       <div className="social-auth-section">
-        <GoogleButton onClick={handleGoogleClick} label="Sign in with Google Workspace" />
+        <GoogleButton onClick={handleGoogleClick} label="Sign in with Google" />
       </div>
 
       <div className="auth-divider">
@@ -117,10 +113,10 @@ export default function Login() {
 
       <form onSubmit={handleSubmit} noValidate>
         <InputField
-          label="Email Address or Username"
+          label="Email address or username"
           id="login-identifier"
           type="text"
-          placeholder="name@domain.com or handle"
+          placeholder="name@company.com or username"
           value={formData.identifier}
           onChange={handleChange('identifier')}
           error={errors.identifier}
@@ -134,7 +130,7 @@ export default function Login() {
           label="Password"
           id="login-password"
           type={showPassword ? 'text' : 'password'}
-          placeholder="Enter your security password"
+          placeholder="Enter your password"
           value={formData.password}
           onChange={handleChange('password')}
           error={errors.password}
@@ -156,13 +152,13 @@ export default function Login() {
             isLoading={isSubmitting}
             icon={ArrowRight}
           >
-            Authenticate Session
+            Sign in
           </PrimaryButton>
         </div>
 
         <div className="auth-switch">
-          Don't have an active account?{' '}
-          <Link to="/register">Create one in seconds</Link>
+          Don't have an account?{' '}
+          <Link to="/register">Create an account</Link>
         </div>
       </form>
     </AuthLayout>

@@ -41,18 +41,17 @@ export default function ForgotPassword() {
         username: username.trim(),
       });
 
-      // Navigate to OTP verification page passing username and associated email
       navigate('/verify-reset-otp', {
         state: {
           username: username.trim(),
           email: response?.email || '',
-          message: response?.message || 'A 6-digit OTP has been sent to your email address.',
+          message: response?.message || 'A verification code has been sent to your email.',
         },
       });
     } catch (err) {
       const msg = extractErrorMessage(
         err,
-        'Could not locate account with this username. Please verify the handle and try again.'
+        'No user found with this username. Please check your username and try again.'
       );
       setApiError(msg);
     } finally {
@@ -62,32 +61,29 @@ export default function ForgotPassword() {
 
   return (
     <AuthLayout
-      title="Recover password"
-      subtitle="Enter your username to receive a secure password recovery code"
-      stepText="Step 01 / Identity Verification"
-      showcaseHighlight="Account recovery is governed by single-use, time-delimited cryptographic tokens."
+      title="Reset your password"
+      subtitle="Enter your username and we'll send a verification code to your email"
     >
-      {/* Information card explaining the email dispatch mechanism */}
       <div className="status-banner banner-info">
-        <Info size={17} className="status-banner-icon" />
+        <Info size={16} className="status-banner-icon" />
         <span>
-          A one-time verification code (OTP) will be sent to the email address registered with this username.
+          A 6-digit recovery code will be dispatched to the email associated with your username.
         </span>
       </div>
 
       {apiError && (
         <div className="status-banner banner-danger" role="alert">
-          <AlertCircle size={17} className="status-banner-icon" />
+          <AlertCircle size={16} className="status-banner-icon" />
           <span>{apiError}</span>
         </div>
       )}
 
       <form onSubmit={handleSubmit} noValidate>
         <InputField
-          label="Your Registered Username"
+          label="Username"
           id="forgot-username"
           type="text"
-          placeholder="e.g. alex_chen or handle"
+          placeholder="e.g. alex"
           value={username}
           onChange={handleChange}
           error={error}
@@ -95,7 +91,7 @@ export default function ForgotPassword() {
           autoComplete="username"
           required
           autoFocus
-          helperText="Enter the exact handle assigned to your Chat System account"
+          helperText="Enter the username associated with your account"
         />
 
         <div className="form-submit-wrapper">
@@ -104,13 +100,13 @@ export default function ForgotPassword() {
             isLoading={isSubmitting}
             icon={ArrowRight}
           >
-            Dispatch Verification Code
+            Send verification code
           </PrimaryButton>
         </div>
 
         <div className="otp-back-row">
           <Link to="/login" className="btn-back-link">
-            <ArrowLeft size={14} /> Back to Sign In
+            <ArrowLeft size={13} /> Back to sign in
           </Link>
         </div>
       </form>

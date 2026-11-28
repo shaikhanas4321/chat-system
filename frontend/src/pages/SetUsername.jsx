@@ -52,7 +52,7 @@ export default function SetUsername() {
     } catch (err) {
       const msg = extractErrorMessage(
         err,
-        'Username is already taken. Please pick another unique handle.'
+        'Username already exists. Please choose a different username.'
       );
       setApiError(msg);
     } finally {
@@ -62,24 +62,22 @@ export default function SetUsername() {
 
   return (
     <AuthLayout
-      title="Claim your handle"
-      subtitle="Choose a unique username to identify yourself across chats and direct messages"
-      stepText="Profile Setup"
-      showcaseHighlight="Handles are globally unique and indexable for instant peer discovery."
+      title="Choose your username"
+      subtitle="Select a unique username to identify yourself in conversations"
     >
       {apiError && (
         <div className="status-banner banner-danger" role="alert">
-          <AlertCircle size={17} className="status-banner-icon" />
+          <AlertCircle size={16} className="status-banner-icon" />
           <span>{apiError}</span>
         </div>
       )}
 
       <form onSubmit={handleSubmit} noValidate>
         <InputField
-          label="Unique Username"
+          label="Username"
           id="set-username-field"
           type="text"
-          placeholder="e.g. Satoshi, elon, dev_guru"
+          placeholder="e.g. alex"
           value={username}
           onChange={handleChange}
           error={error}
@@ -87,7 +85,7 @@ export default function SetUsername() {
           autoComplete="username"
           required
           autoFocus
-          helperText="3-30 characters, lowercase letters, numbers, and underscores only"
+          helperText="3-30 characters, letters, numbers and underscores only"
         />
 
         <div className="form-submit-wrapper">
@@ -96,7 +94,7 @@ export default function SetUsername() {
             isLoading={isSubmitting}
             icon={ArrowRight}
           >
-            Claim Handle & Launch App
+            Continue to dashboard
           </PrimaryButton>
         </div>
       </form>

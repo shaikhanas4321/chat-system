@@ -10,7 +10,6 @@ export default function VerifyResetOtp() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Retrieve username and email passed from forgot password screen
   const username = location.state?.username || '';
   const email = location.state?.email || '';
   const initialMessage = location.state?.message || '';
@@ -18,20 +17,18 @@ export default function VerifyResetOtp() {
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [error, setError] = useState('');
   const [isVerifying, setIsVerifying] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes (matches backend cache timeout)
+  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes
   const [resendCooldown, setResendCooldown] = useState(60);
   const [resendStatus, setResendStatus] = useState({ loading: false, message: '', error: '' });
 
   const inputRefs = useRef([]);
 
-  // Auto-focus first input box
   useEffect(() => {
     if (inputRefs.current[0]) {
       inputRefs.current[0].focus();
     }
   }, []);
 
-  // 5-minute expiry countdown
   useEffect(() => {
     if (timeLeft <= 0) return;
     const interval = setInterval(() => {
@@ -40,7 +37,6 @@ export default function VerifyResetOtp() {
     return () => clearInterval(interval);
   }, [timeLeft]);
 
-  // Resend cooldown timer
   useEffect(() => {
     if (resendCooldown <= 0) return;
     const interval = setInterval(() => {
@@ -71,7 +67,6 @@ export default function VerifyResetOtp() {
     setOtp(newOtp);
     setError('');
 
-    // Advance focus to next digit box
     if (index < 5 && inputRefs.current[index + 1]) {
       inputRefs.current[index + 1].focus();
     }
@@ -132,14 +127,12 @@ export default function VerifyResetOtp() {
         otp: fullCode,
       });
 
-      // Backend returns { message: "otp has matched", reset: "token" } or reset_token
       const resetToken = response.reset || response.reset_token;
 
       if (!resetToken) {
         throw new Error('Failed to retrieve reset authorization token from server.');
       }
 
-      // Navigate to Set New Password page passing reset_token securely through location state
       navigate('/set-password', {
         state: {
           reset_token: resetToken,
@@ -149,7 +142,7 @@ export default function VerifyResetOtp() {
     } catch (err) {
       const msg = extractErrorMessage(
         err,
-        'Invalid or expired recovery code. Please double-check the digits or request a fresh code.'
+        'Invalid or expired recovery code. Please check the code or request a new one.'
       );
       setError(msg);
     } finally {
@@ -169,12 +162,12 @@ export default function VerifyResetOtp() {
       setTimeLeft(300);
       setResendStatus({
         loading: false,
-        message: response?.message || 'A fresh verification code has been dispatched to your email.',
+        message: response?.message || 'A fresh code has been sent to your email.',
         error: '',
       });
       setTimeout(() => setResendStatus((s) => ({ ...s, message: '' })), 4000);
     } catch (err) {
-      const msg = extractErrorMessage(err, 'Could not resend OTP. Please try again.');
+      const msg = extractErrorMessage(err, 'Could not resend code. Please try again.');
       setResendStatus({ loading: false, message: '', error: msg });
     }
   };
@@ -184,18 +177,15 @@ export default function VerifyResetOtp() {
   return (
     <AuthLayout
       title="Verify recovery code"
-      subtitle="Enter the 6-digit confirmation code dispatched to your registered email"
-      stepText="Step 02 / Token Authentication"
-      showcaseHighlight="Multi-factor challenge validates rightful ownership of the account before password mutation."
+      subtitle="Enter the 6-digit code sent to your email"
     >
       <div className="otp-container">
-        {/* Recipient Details Pill */}
         <div className="recipient-pill">
           <div className="recipient-pill-icon">
-            <User size={16} />
+            <User size={15} />
           </div>
           <div className="recipient-pill-details">
-            <span className="recipient-pill-label">Account Subject</span>
+            <span className="recipient-pill-label">Account</span>
             <span className="recipient-pill-value">
               @{username || 'unknown'} {email ? `(${email})` : ''}
             </span>
@@ -204,35 +194,35 @@ export default function VerifyResetOtp() {
 
         {initialMessage && !error && !resendStatus.message && (
           <div className="status-banner banner-info">
-            <Mail size={16} className="status-banner-icon" />
+            <Mail size={15} className="status-banner-icon" />
             <span>{initialMessage}</span>
           </div>
         )}
 
         {error && (
           <div className="status-banner banner-danger" role="alert">
-            <AlertCircle size={17} className="status-banner-icon" />
+            <AlertCircle size={16} className="status-banner-icon" />
             <span>{error}</span>
           </div>
         )}
 
         {isExpired && !error && (
           <div className="status-banner banner-danger">
-            <Clock size={17} className="status-banner-icon" />
-            <span>Code has expired after 5 minutes. Please click 'Resend OTP' below.</span>
+            <Clock size={16} className="status-banner-icon" />
+            <span>The code has expired. Please resend a new OTP.</span>
           </div>
         )}
 
         {resendStatus.message && (
           <div className="status-banner banner-success">
-            <CheckCircle2 size={17} className="status-banner-icon" />
+            <CheckCircle2 size={16} className="status-banner-icon" />
             <span>{resendStatus.message}</span>
           </div>
         )}
 
         {resendStatus.error && (
           <div className="status-banner banner-danger">
-            <AlertCircle size={17} className="status-banner-icon" />
+            <AlertCircle size={16} className="status-banner-icon" />
             <span>{resendStatus.error}</span>
           </div>
         )}
@@ -265,20 +255,20 @@ export default function VerifyResetOtp() {
               disabled={otp.join('').length < 6 || isVerifying}
               icon={ArrowRight}
             >
-              Verify Code & Proceed
+              Verify & continue
             </PrimaryButton>
           </div>
         </form>
 
         <div className="otp-timer-row">
           <div className="otp-countdown">
-            <span>Code expiry:</span>
+            <span>Expires in:</span>
             <span className="otp-countdown-mono">{formatTimer(timeLeft)}</span>
           </div>
 
           <div>
             {resendCooldown > 0 ? (
-              <span className="otp-countdown-mono" style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+              <span className="otp-countdown-mono" style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)' }}>
                 Resend in {resendCooldown}s
               </span>
             ) : (
@@ -296,7 +286,7 @@ export default function VerifyResetOtp() {
 
         <div className="otp-back-row">
           <Link to="/forgot-password" className="btn-back-link">
-            <ArrowLeft size={14} /> Back to Username Input
+            <ArrowLeft size={13} /> Back to username input
           </Link>
         </div>
       </div>

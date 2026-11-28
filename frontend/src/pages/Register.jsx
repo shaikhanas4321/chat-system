@@ -21,13 +21,12 @@ export default function Register() {
   const [apiError, setApiError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Validation rules
+  // Password validation rules
   const hasMinLen = formData.password.length >= 8;
   const hasLetter = /[a-zA-Z]/.test(formData.password);
   const hasNumber = /\d/.test(formData.password);
   const hasSpecial = /[^a-zA-Z0-9]/.test(formData.password);
 
-  // Strength score: 0 to 4
   const strengthScore = [hasMinLen, hasLetter, hasNumber, hasSpecial].filter(Boolean).length;
 
   const validate = () => {
@@ -37,17 +36,17 @@ export default function Register() {
     if (!formData.email.trim()) {
       newErrors.email = 'Email address is required';
     } else if (!emailRegex.test(formData.email.trim())) {
-      newErrors.email = 'Please provide a valid work or personal email address';
+      newErrors.email = 'Please provide a valid email address';
     }
 
     if (!formData.password) {
       newErrors.password = 'Password is required';
     } else if (formData.password.length < 8) {
-      newErrors.password = 'Must contain at least 8 characters';
+      newErrors.password = 'Password must be at least 8 characters';
     }
 
     if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Confirmation password is required';
+      newErrors.confirmPassword = 'Please confirm your password';
     } else if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match';
     }
@@ -78,11 +77,9 @@ export default function Register() {
         confirmPassword: formData.confirmPassword,
       });
 
-      // Navigate to OTP verification passing email state
       navigate('/verify-otp', {
         state: {
           email: response?.email || formData.email.trim(),
-          flow: 'registration',
         },
       });
     } catch (err) {
@@ -98,24 +95,22 @@ export default function Register() {
 
   return (
     <AuthLayout
-      title="Create account"
-      subtitle="Establish your encrypted messaging identity with Chat System"
-      stepText="Step 01 / Registration"
-      showcaseHighlight="Deploying Zero-Trust identity protocols for ultra-fast, tamper-proof communications."
+      title="Create an account"
+      subtitle="Sign up with your email to start communicating seamlessly"
     >
       {apiError && (
         <div className="status-banner banner-danger" role="alert">
-          <AlertCircle size={17} className="status-banner-icon" />
+          <AlertCircle size={16} className="status-banner-icon" />
           <span>{apiError}</span>
         </div>
       )}
 
       <form onSubmit={handleSubmit} noValidate>
         <InputField
-          label="Corporate or Personal Email"
+          label="Email address"
           id="register-email"
           type="email"
-          placeholder="name@domain.com"
+          placeholder="name@company.com"
           value={formData.email}
           onChange={handleChange('email')}
           error={errors.email}
@@ -185,10 +180,10 @@ export default function Register() {
                 <Check size={12} /> Min. 8 characters
               </span>
               <span className={`checklist-item ${hasLetter ? 'valid' : ''}`}>
-                <Check size={12} /> Contains letters
+                <Check size={12} /> Letters
               </span>
               <span className={`checklist-item ${hasNumber ? 'valid' : ''}`}>
-                <Check size={12} /> Contains numbers
+                <Check size={12} /> Numbers
               </span>
               <span className={`checklist-item ${hasSpecial ? 'valid' : ''}`}>
                 <Check size={12} /> Special character
@@ -198,7 +193,7 @@ export default function Register() {
         )}
 
         <InputField
-          label="Confirm Password"
+          label="Confirm password"
           id="register-confirm-password"
           type={showConfirmPassword ? 'text' : 'password'}
           placeholder="Repeat your password"
@@ -218,13 +213,13 @@ export default function Register() {
             isLoading={isSubmitting}
             icon={ArrowRight}
           >
-            Continue to Verification
+            Create account
           </PrimaryButton>
         </div>
 
         <div className="auth-switch">
-          Already registered?{' '}
-          <Link to="/login">Sign in with credentials</Link>
+          Already have an account?{' '}
+          <Link to="/login">Sign in</Link>
         </div>
       </form>
     </AuthLayout>

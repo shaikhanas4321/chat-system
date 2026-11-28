@@ -10,7 +10,6 @@ export default function SetNewPassword() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Retrieve reset_token forwarded from VerifyResetOtp
   const resetToken = location.state?.reset_token || '';
   const username = location.state?.username || '';
 
@@ -26,7 +25,6 @@ export default function SetNewPassword() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  // Password validation criteria
   const hasMinLen = formData.newPassword.length >= 8;
   const hasLetter = /[a-zA-Z]/.test(formData.newPassword);
   const hasNumber = /\d/.test(formData.newPassword);
@@ -47,7 +45,7 @@ export default function SetNewPassword() {
     if (!formData.confirmPassword) {
       newErrors.confirmPassword = 'Confirmation password is required';
     } else if (formData.newPassword !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Both passwords must match exactly';
+      newErrors.confirmPassword = 'Passwords do not match';
     }
 
     setErrors(newErrors);
@@ -67,7 +65,7 @@ export default function SetNewPassword() {
     if (!validate()) return;
 
     if (!resetToken) {
-      setApiError('Missing password reset authorization token. Please restart the recovery flow.');
+      setApiError('Missing reset token. Please restart the password recovery flow.');
       return;
     }
 
@@ -81,7 +79,6 @@ export default function SetNewPassword() {
         confirm_password: formData.confirmPassword,
       });
 
-      // Show beautiful success state
       setIsSuccess(true);
     } catch (err) {
       const msg = extractErrorMessage(
@@ -99,22 +96,18 @@ export default function SetNewPassword() {
       title={isSuccess ? "Password updated" : "Set new password"}
       subtitle={
         isSuccess
-          ? "Your credentials have been re-encrypted and secured."
-          : `Define new credentials for @${username || 'your account'}`
+          ? "Your password has been reset successfully."
+          : `Create a new password for @${username || 'your account'}`
       }
-      stepText="Step 03 / Credential Mutation"
-      showcaseHighlight="PBKDF2 SHA-256 one-way cryptographic hashing protects stored credentials."
     >
-      {/* If successfully reset, render celebratory confirmation state */}
       {isSuccess ? (
         <div className="success-card-block">
           <div className="success-icon-gem">
-            <CheckCircle2 size={30} />
+            <CheckCircle2 size={24} />
           </div>
-          <h3>Password Successfully Reset</h3>
+          <h3>Password reset complete</h3>
           <p>
-            Your account authentication credentials have been securely updated in the database.
-            You can now sign in using your new password.
+            Your account password has been updated. You can now sign in using your new credentials.
           </p>
 
           <PrimaryButton
@@ -122,38 +115,38 @@ export default function SetNewPassword() {
             onClick={() =>
               navigate('/login', {
                 state: {
-                  verifiedMessage: 'Password successfully updated! Please sign in with your new password.',
+                  verifiedMessage: 'Password reset successfully! Please sign in with your new password.',
                   prefillEmail: username,
                 },
               })
             }
             icon={ArrowRight}
           >
-            Sign In to Account
+            Sign in to account
           </PrimaryButton>
         </div>
       ) : (
         <>
           {apiError && (
             <div className="status-banner banner-danger" role="alert">
-              <AlertCircle size={17} className="status-banner-icon" />
+              <AlertCircle size={16} className="status-banner-icon" />
               <span>{apiError}</span>
             </div>
           )}
 
           {!resetToken && (
             <div className="status-banner banner-danger">
-              <AlertCircle size={17} className="status-banner-icon" />
-              <span>No reset token detected. You must first verify your recovery code.</span>
+              <AlertCircle size={16} className="status-banner-icon" />
+              <span>No reset token found. Please verify your OTP first.</span>
             </div>
           )}
 
           <form onSubmit={handleSubmit} noValidate>
             <InputField
-              label="New Password"
+              label="New password"
               id="set-new-password"
               type={showNewPassword ? 'text' : 'password'}
-              placeholder="Create a strong password"
+              placeholder="Min. 8 characters"
               value={formData.newPassword}
               onChange={handleChange('newPassword')}
               error={errors.newPassword}
@@ -223,10 +216,10 @@ export default function SetNewPassword() {
             )}
 
             <InputField
-              label="Confirm New Password"
+              label="Confirm new password"
               id="set-confirm-password"
               type={showConfirmPassword ? 'text' : 'password'}
-              placeholder="Re-type your new password"
+              placeholder="Repeat your new password"
               value={formData.confirmPassword}
               onChange={handleChange('confirmPassword')}
               error={errors.confirmPassword}
@@ -244,13 +237,13 @@ export default function SetNewPassword() {
                 disabled={isSubmitting || !resetToken}
                 icon={ArrowRight}
               >
-                Save New Password & Sign In
+                Reset password
               </PrimaryButton>
             </div>
 
             <div className="otp-back-row">
               <Link to="/login" className="btn-back-link">
-                Cancel and return to Sign In
+                Cancel and return to sign in
               </Link>
             </div>
           </form>
